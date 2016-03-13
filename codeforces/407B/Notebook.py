@@ -94,7 +94,7 @@ def example_generator(line):
 
 # In[68]:
 
-def do_maze(n, p):
+def do_rooms(n, p):
     """Print out the number of times Vasya needs to use portals to get to room n+1
     
     dp[i] is the number of portal jumps required to start off at room i with an odd
@@ -120,8 +120,9 @@ def do_maze(n, p):
         for j in range(p[i], i):
             portal_jumps += dp[j] # jumps to get you from room j with odd to room j with even
             portal_jumps += 1 # extra jump to get you from j to j+1
+            portal_jumps = int(portal_jumps % (1e9+7))
             
-        dp[i] = int(portal_jumps % (1e9+7))
+        dp[i] = portal_jumps
         
     total_pjumps = 0    
     for i in range(n):
@@ -137,4 +138,4 @@ example = example_generator(sys.stdin)
 if __name__ == '__main__':
     n, P = next(example)
 
-    do_maze(n, P)
+    do_rooms(n, P)
