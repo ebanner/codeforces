@@ -118,17 +118,18 @@ def do_maze(n, p):
         
         # This block would read cleaner if it was just a for loop!
         for j in range(p[i], i):
-            portal_jumps += (dp[j] % (1e9+7)) # jumps to get you from room j with odd to room j with even
-            portal_jumps += (1 % (1e9+7)) # extra jump to get you from j to j+1
+            portal_jumps += dp[j] # jumps to get you from room j with odd to room j with even
+            portal_jumps += 1 # extra jump to get you from j to j+1
             
         dp[i] = int(portal_jumps % (1e9+7))
         
     total_pjumps = 0    
     for i in range(n):
-        total_pjumps += (dp[i] % (1e9+7))
-        total_pjumps += (1 % (1e9+7))
+        total_pjumps += dp[i]
+        total_pjumps += 1
+        total_pjumps = int(total_pjumps % (1e9+7))
         
-    print(int(total_pjumps % (1e9+7)))
+    print(total_pjumps)
 
 
 example = example_generator(sys.stdin)
