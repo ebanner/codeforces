@@ -1,3 +1,5 @@
+M = {}
+
 def min_rest(T, A):
     """Minimum days to rest at time `T` given agenda `A`
 
@@ -19,10 +21,14 @@ def min_rest(T, A):
         either CONTEST or GYM.
 
         """
+        if (t, today_activity) in M:
+            return M[(t, today_activity)]
+
         # print '{}rest_recursive(t={}, today_activity={}'.format(' '*depth, t, N[today_activity])
         if t == 1:
             min_rest = 1 if today_activity == REST else 0
             # print '{}found min_rest={} for t={}, today_activity={}'.format(' '*depth, min_rest, t, N[today_activity])
+            M[(1, today_activity)] = min_rest
             return min_rest
 
         min_rest = 1e100
@@ -35,6 +41,7 @@ def min_rest(T, A):
             min_rest = min(nb_rest, min_rest)
 
         # print '{}found min_rest={} for t={}, today_activity={}'.format(' '*depth, min_rest, t, N[today_activity])
+        M[(t, today_activity)] = min_rest
         return min_rest
 
     min_rest = 1e100
