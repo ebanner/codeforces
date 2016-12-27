@@ -172,6 +172,7 @@ def dp_backward_solve(A, n):
         return 1 if A[0] == set([REST]) else 0
 
     best = {REST: 1, CONTEST: 0, GYM: 0}
+
     for i in range(1, n):
         new_best = {REST: 1e100, CONTEST: 1e100, GYM: 1e100}
         for activity in A[i]:
@@ -196,17 +197,16 @@ def dp_forward_solve(A, n):
     if n == 1:
         return 1 if A[0] == set([REST]) else 0
 
-    best = {REST: 1, # can always rest
-            CONTEST: 0 if CONTEST in A[0] else 1e100,
-            GYM: 0 if GYM in A[0] else 1e100}
+    best = {REST: 1, CONTEST: 0, GYM: 0}
+
     for i in range(n-1):
         new_best = {REST: 1e100, CONTEST: 1e100, GYM: 1e100}
-        for activity, nb_rest in best.items():
+        for activity in A[i]: # *only* use activities which are legal for today for computing paths for tomorrow
             for tomorrow_activity in A[i+1]:
                 if activity == tomorrow_activity and activity in [CONTEST, GYM]:
                     continue
 
-                tomorrow_rest = nb_rest
+                tomorrow_rest = best[activity]
                 tomorrow_rest += 1 if tomorrow_activity == REST else 0
                 new_best[tomorrow_activity] = min(tomorrow_rest, new_best[tomorrow_activity])
 
