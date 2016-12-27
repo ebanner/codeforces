@@ -163,6 +163,11 @@ def bfs_solve(A, n):
     return min(R[i][n-1] for i in range(3))
 
 def dp_backward_solve(A, n):
+    """DP solution
+
+    Starting with dp[i], compute it from dp[i-1].
+
+    """
     if n == 1:
         return 1 if A[0] == set([REST]) else 0
 
@@ -182,6 +187,33 @@ def dp_backward_solve(A, n):
 
     return min(best.values())
 
+def dp_forward_solve(A, n):
+    """DP solution
+
+    Starting from dp[i-1], compute dp[i].
+
+    """
+    if n == 1:
+        return 1 if A[0] == set([REST]) else 0
+
+    best = {REST: 1, # can always rest
+            CONTEST: 0 if CONTEST in A[0] else 1e100,
+            GYM: 0 if GYM in A[0] else 1e100}
+    for i in range(n-1):
+        new_best = {REST: 1e100, CONTEST: 1e100, GYM: 1e100}
+        for activity, nb_rest in best.items():
+            for tomorrow_activity in A[i+1]:
+                if activity == tomorrow_activity and activity in [CONTEST, GYM]:
+                    continue
+
+                tomorrow_rest = nb_rest
+                tomorrow_rest += 1 if tomorrow_activity == REST else 0
+                new_best[tomorrow_activity] = min(tomorrow_rest, new_best[tomorrow_activity])
+
+        best = new_best
+
+    return min(best.values())
+
 if __name__ == '__main__':
     n = int(raw_input())
     A = [int(num) for num in raw_input().split()]
@@ -193,7 +225,9 @@ if __name__ == '__main__':
          2: {GYM, REST},
          3: {CONTEST, GYM, REST}}
 
-    print dp_backward_solve(A=[D[a] for a in A], n=n)
+    print dp_forward_solve(A=[D[a] for a in A], n=n)
+
+    # print dp_backward_solve(A=[D[a] for a in A], n=n)
 
     # print bfs_solve(A=[D[a] for a in A], n=n)
 
