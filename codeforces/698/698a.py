@@ -52,6 +52,9 @@ def min_rest(T, A):
     A : list of options for every day
 
     """
+    if T == 1:
+        return 1 if A[0] == set([REST]) else 0
+
     @memoize
     def rest_recursive(t, today_activity, depth=0):
         """Minimum days of rest ending in today's activity
@@ -159,6 +162,26 @@ def bfs_solve(A, n):
 
     return min(R[i][n-1] for i in range(3))
 
+def dp_backward_solve(A, n):
+    if n == 1:
+        return 1 if A[0] == set([REST]) else 0
+
+    best = {REST: 1, CONTEST: 0, GYM: 0}
+    for i in range(1, n):
+        new_best = {REST: 1e100, CONTEST: 1e100, GYM: 1e100}
+        for activity in A[i]:
+            for yesterday_activity in A[i-1]:
+                if activity == yesterday_activity and activity in [CONTEST, GYM]:
+                    continue
+
+                nb_rest = best[yesterday_activity]
+                nb_rest += 1 if activity == REST else 0
+                new_best[activity] = min(nb_rest, new_best[activity])
+
+        best = new_best
+
+    return min(best.values())
+
 if __name__ == '__main__':
     n = int(raw_input())
     A = [int(num) for num in raw_input().split()]
@@ -170,9 +193,8 @@ if __name__ == '__main__':
          2: {GYM, REST},
          3: {CONTEST, GYM, REST}}
 
-    print bfs_solve(A=[D[a] for a in A], n=n)
+    print dp_backward_solve(A=[D[a] for a in A], n=n)
 
-    # if n == 1:
-    #     print 1 if A[0] == REST else 0
-    # else:
-    #     print min_rest(T=n, A=[None]+[D[a] for a in A]) # one-indexed
+    # print bfs_solve(A=[D[a] for a in A], n=n)
+
+    # print min_rest(T=n, A=[None]+[D[a] for a in A]) # one-indexed
