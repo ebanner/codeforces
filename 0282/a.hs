@@ -12,11 +12,12 @@ main = do
   statements <- getStatements
 
   let 
-    result = foldl step 0 statements
-    step value statement
-     | "++" `isPrefixOf` statement = value + 1
-     | "++" `isSuffixOf` statement = value + 1
-     | "--" `isPrefixOf` statement = value - 1
-     | "--" `isSuffixOf` statement = value - 1
+    x = foldl __ 0 statements
+    __           x statement
+
+     | "++" `isPrefixOf` statement = x+1
+     | "++" `isSuffixOf` statement = x+1
+     | "--" `isPrefixOf` statement = x-1
+     | "--" `isSuffixOf` statement = x-1
   in
-    print result
+    print x
