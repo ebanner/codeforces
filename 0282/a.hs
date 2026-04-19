@@ -1,5 +1,4 @@
 import Data.List (isPrefixOf, isSuffixOf)
-import Data.Function ((&))
 
 
 getStatements :: IO [String]
@@ -13,10 +12,11 @@ main = do
   statements <- getStatements
 
   let 
+    result = foldl step 0 statements
     step value statement
      | "++" `isPrefixOf` statement = value + 1
      | "++" `isSuffixOf` statement = value + 1
      | "--" `isPrefixOf` statement = value - 1
      | "--" `isSuffixOf` statement = value - 1
   in
-    foldl step 0 statements & print
+    print result
