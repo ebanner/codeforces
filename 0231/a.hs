@@ -1,12 +1,13 @@
 import Data.Function ((&))
 
-parse :: String -> [Int]
+parse :: String -> (Int, Int, Int)
 parse line = do
   let tokens = words line
-  map read tokens
+  let [p, v, t] = map read tokens
+  (p, v, t)
 
 
-getProblemConfidencesList :: IO [[Int]]
+getProblemConfidencesList :: IO [(Int, Int, Int)]
 getProblemConfidencesList = do
   n <- readLn
   lines <- sequence (replicate n getLine)
@@ -16,8 +17,8 @@ getProblemConfidencesList = do
 main = do
   problemConfidencesList <- getProblemConfidencesList
 
-  [() | problemConfidences <- problemConfidencesList,
-        sum problemConfidences >= 2
+  [() | (p, v, t) <- problemConfidencesList,
+        p+v+t >= 2
 
    ] & length & print
   
