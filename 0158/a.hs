@@ -13,4 +13,6 @@ main = do
 
   let threshold = scores !! (k-1)
 
-  print $ [() | score <- scores, score >= threshold, score > 0 ] & length
+  [() | score <- scores,
+        score > 0,
+        score >= threshold] & length & print
