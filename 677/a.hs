@@ -12,9 +12,8 @@ getHeights = do
   return heights
 
 
-getWidths :: [Bool] -> [Int]
-getWidths isTaller =
-  map ((+1) . fromEnum) isTaller
+getWidth :: Int -> (Int -> Int)
+getWidth h = (+1) . fromEnum . (>h)
 
 
 main = do
@@ -22,7 +21,6 @@ main = do
   heights <- getHeights
 
   let
-    widths = getWidths $ map (>h) heights
+    widths = map (getWidth h) heights
 
   print $ sum widths
-
