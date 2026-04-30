@@ -13,8 +13,8 @@ getHeights = do
 
 
 getWidths :: [Bool] -> [Int]
-getWidths heights =
-  map ((+1) . fromEnum) heights
+getWidths isTaller =
+  map ((+1) . fromEnum) isTaller
 
 
 main = do
